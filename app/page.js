@@ -174,7 +174,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { getLocations, addLocation, updateLocation, deleteLocation } from '../src/Service/apiservice'
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -182,7 +181,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [sortBy, setSortBy] = useState("name"); 
+  const [sortBy, setSortBy] = useState("name"); // Default sort by name
   const [sortOrder, setSortOrder] = useState("asc"); // Default ascending order
   const [page, setPage] = useState(1); // Default to page 1
   const [limit, setLimit] = useState(10); // Default items per page
@@ -195,7 +194,7 @@ export default function Home() {
       setError(null);
 
       try {
-        const baseUrl = "http://localhost:3001/data"; 
+        const baseUrl = "http://localhost:3001/data"; // Adjust to your backend URL
         let url = `${baseUrl}?_page=${page}&_limit=${limit}&_sort=${sortBy}&_order=${sortOrder}`;
 
         // If there's a search query, include it in the URL
@@ -208,7 +207,7 @@ export default function Home() {
         const response = await fetch(url);
         const result = await response.json();
 
-        console.log("Received data:", result);
+        console.log("Received data:", result); // Log the fetched data
 
         setData(result);
         setResults(result);
