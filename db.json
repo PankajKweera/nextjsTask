@@ -1,0 +1,52 @@
+{
+  "data": [
+    {
+      "code": "AEAJM",
+      "name": "Ajman",
+      "city": "Ajman",
+      "country": "United Arab Emirates",
+      "province": "Ajman",
+      "timezone": "Asia/Dubai",
+      "coordinates": [
+        55.5136433,
+        25.4052165
+      ]
+    },
+    {
+      "code": "AEAUH",
+      "name": "Abu Dhabi",
+      "city": "Abu Dhabi",
+      "country": "United Arab Emirates",
+      "province": "Abu Z¸aby [Abu Dhabi]",
+      "timezone": "Asia/Dubai",
+      "coordinates": [
+        54.37,
+        24.47
+      ]
+    },
+    {
+      "code": "AEFJR",
+      "name": "Al Fujayrah",
+      "city": "Al Fujayrah",
+      "province": "Al Fujayrah",
+      "country": "United Arab Emirates",
+      "timezone": "Asia/Dubai",
+      "coordinates": [
+        56.33,
+        25.12
+      ]
+    },
+    {
+      "code": "AEQIW",
+      "name": "Umm al Qaiwain",
+      "city": "Umm al Qaiwain",
+      "province": "Umm Al Quwain",
+      "country": "United Arab Emirates",
+      "timezone": "Asia/Dubai",
+      "coordinates": [
+        55.55,
+        25.57
+      ]
+    }
+  ]
+}
