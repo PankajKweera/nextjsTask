@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 import React, { useState, useEffect } from 'react';
 import { getLocations, addLocation, updateLocation, deleteLocation } from '../Service/apiservice';
 
@@ -12,40 +12,6 @@ const DataTable = () => {
   const [code, setCode] = useState('');
   const [editCode, setEditCode] = useState(null);
   const [search, setSearch] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(15);
-
-  const [sortConfig, setSortConfig] = useState({
-    key: 'name', 
-    direction: 'asc', 
-  });
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentLocations = filteredLocations.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredLocations.length / itemsPerPage);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const sortData = (locations) => {
-    const { key, direction } = sortConfig;
-    return [...locations].sort((a, b) => {
-      if (a[key] < b[key]) {
-        return direction === 'asc' ? -1 : 1;
-      }
-      if (a[key] > b[key]) {
-        return direction === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  };
-
-  const handleSort = (column) => {
-    let direction = 'asc';
-    if (sortConfig.key === column && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key: column, direction });
-  };
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -54,7 +20,7 @@ const DataTable = () => {
         const locationsArray = Object.keys(data).map(key => ({
           ...data[key], 
           code: key 
-        }));
+        })); 
         setLocations(locationsArray);
         setFilteredLocations(locationsArray);
       } catch (error) {
@@ -111,7 +77,7 @@ const DataTable = () => {
       console.error("Error deleting location:", error);
     }
   };
-
+  
   const handleEditLocation = (location) => {
     setName(location.name);
     setCity(location.city);
@@ -132,7 +98,8 @@ const DataTable = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Location Management</h1>
-      <div style={styles.tableSearchContainer}>
+
+      <div style={styles.searchContainer}>
         <input
           type="text"
           placeholder="Search locations..."
@@ -140,60 +107,6 @@ const DataTable = () => {
           onChange={(e) => setSearch(e.target.value)}
           style={styles.searchInput}
         />
-      </div>
-
-      <div style={styles.tableBody}>
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.tableHeader} onClick={() => handleSort('name')}>Name</th>
-              <th style={styles.tableHeader} onClick={() => handleSort('city')}>City</th>
-              <th style={styles.tableHeader} onClick={() => handleSort('province')}>Province</th>
-              <th style={styles.tableHeader} onClick={() => handleSort('country')}>Country</th>
-              <th style={styles.tableHeader} onClick={() => handleSort('code')}>Code</th>
-              <th style={styles.tableHeader}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(filteredLocations) && filteredLocations.length > 0 ? (
-              sortData(currentLocations).map((location, index) => (
-                <tr key={index} style={styles.tableRow}>
-                  <td style={styles.tableData}>{location.name}</td>
-                  <td style={styles.tableData}>{location.city}</td>
-                  <td style={styles.tableData}>{location.province}</td>
-                  <td style={styles.tableData}>{location.country}</td>
-                  <td style={styles.tableData}>{location.code}</td>
-                  <td style={styles.tableData}>
-                    <button onClick={() => handleEditLocation(location)} style={styles.actionButton}>Edit</button>
-                    <button onClick={() => handleDeleteLocation(location.code)} style={styles.actionButton}>Delete</button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" style={styles.noLocations}>No locations found</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <div style={styles.paginationContainer}>
-        <button 
-          onClick={() => paginate(currentPage - 1)} 
-          disabled={currentPage === 1}
-          style={styles.paginationButton}
-        >
-          Prev
-        </button>
-        <span style={styles.pageNumber}>{currentPage} of {totalPages}</span>
-        <button 
-          onClick={() => paginate(currentPage + 1)} 
-          disabled={currentPage === totalPages}
-          style={styles.paginationButton}
-        >
-          Next
-        </button>
       </div>
 
       <div style={styles.formContainer}>
@@ -206,45 +119,68 @@ const DataTable = () => {
           {editCode ? 'Update' : 'Add'} Location
         </button>
       </div>
+
+      <table style={styles.table}>
+        <thead>
+          <tr>
+            <th style={styles.tableHeader}>Name</th>
+            <th style={styles.tableHeader}>City</th>
+            <th style={styles.tableHeader}>Province</th>
+            <th style={styles.tableHeader}>Country</th>
+            <th style={styles.tableHeader}>Code</th>
+            <th style={styles.tableHeader}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.isArray(filteredLocations) && filteredLocations.length > 0 ? (
+            filteredLocations.map((location, index) => (
+              <tr key={index} style={styles.tableRow}>
+                <td style={styles.tableData}>{location.name}</td>
+                <td style={styles.tableData}>{location.city}</td>
+                <td style={styles.tableData}>{location.province}</td>
+                <td style={styles.tableData}>{location.country}</td>
+                <td style={styles.tableData}>{location.code}</td>
+                <td style={styles.tableData}>
+                  <button onClick={() => handleEditLocation(location)} style={styles.actionButton}>Edit</button>
+                  <button onClick={() => handleDeleteLocation(location.code)} style={styles.actionButton}>Delete</button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" style={styles.noLocations}>No locations found</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };
-
 const styles = {
   container: {
     maxWidth: '100%',
     height: '100%',
-    overflow: scroll,
+    overflow: 'scroll',
 
   },
   heading: {
     textAlign: 'center',
-    color: '#333',
-  
-  },
-  tableSearchContainer: {
-    textAlign: 'center',
-    maxWidth: '100%',
     marginBottom: '20px',
+    color: '#333',
+    marginTop: '10px',  
   },
-  
   searchContainer: {
     textAlign: 'center',
     marginBottom: '20px',
   },
-  tableBody: {
-    display: 'block', 
-    maxHeight: '300px', 
-    overflowY: 'auto', 
-  },
   searchInput: {
     padding: '10px',
     fontSize: '16px',
-    width: '100%',  // Make search input full width on mobile
-    maxWidth: '600px',  // Set a max-width for larger screens
+    width: '100%',  
+    maxWidth: '600px', 
     borderRadius: '4px',
     border: '1px solid #ddd',
-    margin: '0 auto',  // Center it on mobile screens
+    margin: '0 auto',  
   },
   formContainer: {
     display: 'flex',
@@ -259,7 +195,7 @@ const styles = {
     borderRadius: '4px',
     border: '1px solid #ddd',
     width: '100%',  
-    maxWidth: '400px',  // Set a max-width for larger screens
+    maxWidth: '400px',  
   },
   button: {
     padding: '10px 20px',
@@ -269,7 +205,7 @@ const styles = {
     borderRadius: '4px',
     cursor: 'pointer',
     width: '100%',
-    maxWidth: '200px',  // Set a max-width for the button
+    maxWidth: '200px',  
     marginTop: '10px',
   },
   table: {
@@ -303,41 +239,7 @@ const styles = {
     padding: '10px',
     color: '#888',
   },
-  paginationContainer: {
-
-    textAlign: 'center',
-
-    marginTop: '20px',
-
-  },
-
-  paginationButton: {
-
-    padding: '10px 20px',
-
-    backgroundColor: '#4CAF50',
-
-    color: '#fff',
-
-    border: 'none',
-
-    borderRadius: '4px',
-
-    cursor: 'pointer',
-
-    margin: '0 10px',
-
-  },
-
-  pageNumber: {
-
-    fontSize: '16px',
-
-    margin: '0 10px',
-
-  },
 };
 
-export default DataTable;
 
-app/page.tsx
+export default DataTable;
