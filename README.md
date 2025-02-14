@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Data Table
 
-## Getting Started
+This is a Next.js project that demonstrates a dynamic and reusable Data Table component, capable of handling sorting, pagination, search, and full CRUD operations (Add, Edit, Delete).
 
-First, run the development server:
+## Features
+
+- **Reusable Components**: The Data Table is built using modular components that can be reused across different parts of the application.
+- **CRUD Operations**: Add, Edit, and Delete items directly from the table.
+- **Sorting and Pagination**: Sort by columns and navigate through pages.
+- **Search**: A debounced search functionality to filter data in real-time.
+
+searching sorting  are serverside-----------
+
+GET /data?_page=1&_limit=10&_sort=name&_order=asc 200 10.200 ms - -
+GET /data?_page=1&_limit=10&_sort=name&_order=asc 200 7.264 ms - -
+GET /data?_page=1&_limit=10&_sort=name&_order=asc 2000 11.812 ms -
+
+
+
+
+
+## Reusable Components
+
+### 1. `DataTable`
+This is the main component that displays the data in a table format. It manages the sorting, pagination, and CRUD operations. It uses the following smaller components:
+- `TableHeader`: Displays the column names and handles sorting.
+- `TableRow`: Represents each row of data with edit and delete buttons.
+- `Pagination`: Handles pagination with options to go to the next or previous page.
+- `SearchBar`: Allows users to search through the data.
+
+### 2. `TableHeader`
+This component renders the header of the table, including column names and sort buttons. It ensures that sorting can be performed by clicking the column names.
+
+### 3. `TableRow`
+Represents a row in the table with data and provides edit and delete buttons for managing items.
+
+### 4. `Pagination`
+Handles pagination for the data table, allowing users to move between pages.
+
+### 5. `SearchBar`
+A search input that uses debounce to reduce the number of requests when filtering the data.
+
+## Setup
+
+To get started, clone this repository and install the dependencies:
 
 ```bash
-npm run dev
+git clone <repository-url>
+cd <repository-folder>
+npm install
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+yarn install

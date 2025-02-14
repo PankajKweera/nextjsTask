@@ -1,45 +1,50 @@
-import axios from 'axios';
-const API_URL = 'http://localhost:3001/data';
-export const getLocations = async () => {
-  try {
-    const response = await axios.get(API_URL);
-    console.log('Checkkk->>>>>>>>>>>>>>>>>>>>>>>..',response);
-    return response.data; 
-  } catch (error) {
-    console.error('Error fetching locations:', error);
-    throw error;
-  }
-};
+import axios from "axios";
 
+const API_URL = "http://localhost:3001/data";
 
-export const addLocation = async (newLocation) => {
+export const fetchData = async (params) => {
   try {
-    const response = await axios.post(API_URL, newLocation);
+    const response = await axios.get(`${API_URL}?${new URLSearchParams(params)}`);
     return response.data;
   } catch (error) {
-    console.error('Error adding location:', error);
-    throw error;
+    console.error("Error fetching data:", error);
+    throw new Error("Failed to fetch data");
   }
 };
 
-
-export const updateLocation = async (code, updatedLocation) => {
+export const deleteItem = async (code, data) => {
   try {
-    const response = await axios.put(`${API_URL}/${code}`, updatedLocation);
-    console.log('RESPonse-----------------')
-    return response.data;
+    const updatedData = { ...data };
+    delete updatedData[code];
+
+    await axios.put(API_URL, updatedData);
+    return updatedData;
   } catch (error) {
-    console.error('Error updating location:', error);
-    throw error;
+    console.error("Error deleting item:", error);
+    throw new Error("Failed to delete item");
   }
 };
 
-
-export const deleteLocation = async (code) => {
+export const addItem = async (newItem, data) => {
   try {
-    await axios.delete(`${API_URL}/${code}`);
+    const updatedData = { ...data, [newItem.code]: newItem };
+
+    await axios.put(API_URL, updatedData);
+    return updatedData;
   } catch (error) {
-    console.error('Error deleting location:', error);
-    throw error;
+    console.error("Error adding item:", error);
+    throw new Error("Failed to add item");
+  }
+};
+
+export const editItem = async (editingItem, data) => {
+  try {
+    const updatedData = { ...data, [editingItem.code]: editingItem };
+
+    await axios.put(API_URL, updatedData);
+    return updatedData;
+  } catch (error) {
+    console.error("Error editing item:", error);
+    throw new Error("Failed to edit item");
   }
 };
